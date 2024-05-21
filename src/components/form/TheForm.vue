@@ -2,7 +2,7 @@
   <TheHeader :title="headerTitle" class="header-style" />
   <div class="outer">
     <div class="inner">
-      <n-form ref="formRef" class="form-layout">
+      <n-form ref="formRef" class="form-layout" @submit.prevent="onSubmit">
         <BugDetailsView v-if="isBugDetailsPage" />
         <OverViewAndSubmitView v-else />
 
@@ -25,6 +25,56 @@
             {{ isBugDetailsPage ? "Nästa" : "Skicka" }}
           </n-button>
         </div>
+
+        <n-modal v-model:show="showConfirmModal" title="Confirm Submission">
+          <n-card
+            class="n-modal-style"
+            title="Är du säker?"
+            :bordered="false"
+            size="huge"
+          >
+            <div>Vill du skicka in buggrapporten?</div>
+            <template #footer>
+              <div class="modal-buttons">
+                <n-button @click="showConfirmModal = false">Avbryt</n-button>
+                <n-button type="primary" @click="onSubmit">Skicka</n-button>
+              </div>
+            </template>
+          </n-card>
+        </n-modal>
+
+        <n-modal v-model:show="showErrorModal" title="Fel">
+          <n-card
+            class="n-modal-style"
+            title="Fel"
+            :bordered="false"
+            size="huge"
+          >
+            <div>{{ errorMessage }}</div>
+            <template #footer>
+              <div class="modal-buttons">
+                <n-button @click="closeErrorModal">Stäng</n-button>
+              </div>
+            </template>
+          </n-card>
+        </n-modal>
+
+        <n-modal v-model:show="showConfirmedModal" title="Submission Confirmed">
+          <n-card class="n-modal-style" :bordered="false" size="huge">
+            <template #footer>
+              <div class="confirmed-modal-btn-container">
+                <h2>Rapporten skickad!</h2>
+                <Icon icon="noto:partying-face" class="confetti-icon" />
+                <n-button
+                  type="primary"
+                  class="confirmed-modal-btn"
+                  @click="handleConfirmed"
+                  >Okej</n-button
+                >
+              </div>
+            </template>
+          </n-card>
+        </n-modal>
       </n-form>
     </div>
   </div>
@@ -35,9 +85,19 @@ import BugDetailsView from "@/views/BugDetailsView.vue";
 import OverViewAndSubmitView from "@/views/OverViewAndSubmitView.vue";
 import { RouteNames } from "@/router/routeNames";
 import { useRoute, useRouter } from "vue-router";
-import { computed } from "vue";
-import { NButton, NForm } from "naive-ui";
+import { computed, ref } from "vue";
+import { NButton, NForm, NModal, NCard } from "naive-ui";
 import TheHeader from "@/components/layout/TheHeader.vue";
+import { LocalStorageKeys } from "@/constants/localStorageKeys";
+import { useFormDataStorage } from "@/composables/localStorage";
+import axios from "axios";
+
+const showConfirmModal = ref(false);
+const showConfirmedModal = ref(false);
+const showErrorModal = ref(false);
+const errorMessage = ref("");
+
+const { formDataStorage } = useFormDataStorage();
 
 const route = useRoute();
 const router = useRouter();
@@ -49,14 +109,56 @@ const isBugDetailsPage = computed(
 const headerTitle = computed(() => {
   return isBugDetailsPage.value ? "Bugg Detaljer" : "Översikt och Skicka";
 });
+
 function goBack() {
   router.push({ name: RouteNames.BugDetailsView });
 }
 
 function goNext() {
-  router.push({ name: RouteNames.OverViewAndSubmit });
+  if (isBugDetailsPage.value) {
+    router.push({ name: RouteNames.OverViewAndSubmit });
+  } else {
+    showConfirmModal.value = true;
+  }
+}
+
+async function onSubmit() {
+  const formData = {
+    title: formDataStorage.value.title,
+    priority: parseInt(formDataStorage.value.priority, 10),
+    description: formDataStorage.value.description,
+    project_id: formDataStorage.value.system.key,
+  };
+
+  try {
+    const response = await axios.post(
+      `http://localhost:3000/project/${formData.project_id}/issue`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    showConfirmModal.value = false;
+    showConfirmedModal.value = true;
+    console.log("Issue created:", response.data);
+  } catch (error) {
+    console.error("Error creating issue:", error);
+  }
+}
+
+function closeErrorModal() {
+  showErrorModal.value = false;
+}
+
+function handleConfirmed() {
+  showConfirmedModal.value = false;
+  localStorage.removeItem(LocalStorageKeys.FORM_DATA);
+  router.push({ name: RouteNames.BugDetailsView });
 }
 </script>
+
 <style lang="scss" scoped>
 .form-layout {
   background-color: rgb(235, 235, 245);

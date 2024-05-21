@@ -6,5 +6,7 @@ export const priorityOptions = [
 ];
 
 export const systemOptions = [
-  { label: "Gritacademy", key: "03a7d0d5-ce35-456b-9241-ded6d48d9634" },
+  { label: "Projekt 1", key: "bea61e8c-681a-471e-bde8-eb4b422d8bab" },
+  { label: "Projekt 2", key: "90f7c6bb-941f-40d7-b9eb-d28771e3ba35" },
+  { label: "Projekt 3", key: "adb22331-2647-4fc0-88c2-e8fdee29a431" },
 ].sort((a, b) => a.label.localeCompare(b.label));
