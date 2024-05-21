@@ -41,11 +41,9 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import { useThemeVars } from "naive-ui";
-import { computed } from "vue";
-import { useLocalStorage, useToggle } from "@vueuse/core";
+import { useToggle } from "@vueuse/core";
 import { useRouter } from "vue-router";
 import { RouteNames } from "@/router/routeNames";
-import { LocalStorageKeys } from "@/constants/localStorageKeys";
 import { useUserDataStorage } from "@/composables/localStorage";
 import { NButton } from "naive-ui";
 

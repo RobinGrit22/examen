@@ -1,6 +1,6 @@
 <template>
   <div class="form-layout">
-    <BaseCard class="left-border-color">
+    <BaseCard>
       <h3>Välj system</h3>
       <NMessageProvider>
         <div class="add-system-button-container">
@@ -12,7 +12,7 @@
         </div>
       </NMessageProvider>
     </BaseCard>
-    <BaseCard class="card-with-icon left-border-color">
+    <BaseCard class="card-with-icon">
       <h3>Buggens titel</h3>
       <n-input
         v-model:value="formDataStorage.title"
@@ -23,14 +23,14 @@
         maxlength="50"
       />
     </BaseCard>
-    <BaseCard class="left-border-color">
+    <BaseCard>
       <h3>Beskrivning</h3>
       <BaseTextarea
         v-model:value="formDataStorage.description"
         placeholder-text="Beskriv buggen"
       />
     </BaseCard>
-    <BaseCard class="left-border-color">
+    <BaseCard>
       <h3>Prioritet</h3>
       <div class="test">
         <BaseRadioInput
@@ -39,7 +39,7 @@
         />
       </div>
     </BaseCard>
-    <BaseCard class="left-border-color">
+    <BaseCard>
       <h3>Rapporterad av</h3>
       <div class="reported-by">
         <div class="user-info">
@@ -78,7 +78,6 @@ import { systemOptions } from "@/utils/commonOptions";
 import BaseTextarea from "@/components/UI/BaseTextarea.vue";
 import { priorityOptions } from "@/utils/commonOptions";
 import BaseRadioInput from "@/components/UI/BaseRadioInput.vue";
-import TheHeader from "@/components/layout/TheHeader.vue";
 import {
   useUserDataStorage,
   useFormDataStorage,
@@ -120,12 +119,6 @@ function onChangeUserClick() {
 </script>
 
 <style lang="scss" scoped>
-.header-style {
-  position: sticky;
-  top: 0;
-  background-color: rgb(244, 244, 249);
-  z-index: 1000;
-}
 .reported-by {
   display: flex;
   justify-content: space-between;
@@ -147,35 +140,13 @@ function onChangeUserClick() {
 .add-system-button {
   margin-top: 10px;
 }
-:deep(.n-form-item) {
-  grid-template-rows: auto 1fr auto;
-  grid-gap: 4px;
-  margin-bottom: 0 !important;
-}
-:deep(.n-form-item .n-form-item-feedback-wrapper:empty) {
-  min-height: 0;
-  margin: 0;
-  padding: 0;
-}
 .user-image {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   object-fit: cover;
 }
-.n-form-item .n-form-item-feedback-wrapper:empty {
-  min-height: 0;
-  margin: 0;
-  padding: 0;
-}
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.left-border-color {
-  border-left: 5px solid rgb(184, 126, 184);
-}
+
 .form-layout {
   width: 100%;
   display: flex;

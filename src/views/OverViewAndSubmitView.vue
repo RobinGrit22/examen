@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <BaseCard class="card-one-left-border-color info-item space-on-first">
+    <BaseCard class="info-item space-on-first">
       <div class="top-content">
         <div class="content">
           <h3>Rapporterad av:</h3>
@@ -16,7 +16,7 @@
         </n-button>
       </div>
       <Transition name="fade">
-        <div v-if="editStates.userName.value">
+        <div v-if="editStates.userName.value.value">
           <n-button
             type="primary"
             class="style-btn"
@@ -29,7 +29,7 @@
       </Transition>
     </BaseCard>
 
-    <BaseCard class="card-one-left-border-color info-item">
+    <BaseCard class="info-item">
       <div class="top-content">
         <div class="content">
           <h3>System:</h3>
@@ -45,7 +45,7 @@
         </n-button>
       </div>
       <Transition name="fade">
-        <div v-if="editStates.system.value">
+        <div v-if="editStates.system.value.value">
           <BaseDropdown
             :options="systemOptions"
             :selected-label="selectedLabel"
@@ -55,7 +55,7 @@
       </Transition>
     </BaseCard>
 
-    <BaseCard class="card-one-left-border-color info-item">
+    <BaseCard class="info-item">
       <div class="top-content">
         <div class="content">
           <h3>Titel:</h3>
@@ -72,7 +72,7 @@
       </div>
       <Transition name="fade">
         <n-input
-          v-if="editStates.title.value"
+          v-if="editStates.title.value.value"
           v-model:value="formDataStorage.title"
           type="text"
           placeholder="Ny buggtitel"
@@ -83,7 +83,7 @@
       </Transition>
     </BaseCard>
 
-    <BaseCard class="left-border-color info-item">
+    <BaseCard class="info-item">
       <div class="top-content">
         <div class="content">
           <h3>Beskrivning:</h3>
@@ -100,14 +100,14 @@
       </div>
       <Transition name="fade">
         <BaseTextarea
-          v-if="editStates.description.value"
+          v-if="editStates.description.value.value"
           v-model:value="formDataStorage.description"
           placeholder-text="Beskriv buggen"
         />
       </Transition>
     </BaseCard>
 
-    <BaseCard class="left-border-color info-item">
+    <BaseCard class="info-item">
       <div class="top-content">
         <div class="content">
           <h3>Prioritet:</h3>
@@ -123,7 +123,7 @@
         </n-button>
       </div>
       <Transition name="fade">
-        <div v-if="editStates.priority.value" class="add-widht">
+        <div v-if="editStates.priority.value.value" class="add-widht">
           <BaseRadioInput
             v-model:modelValue="formDataStorage.priority"
             :options="priorityOptions"
@@ -145,7 +145,6 @@ import { systemOptions, priorityOptions } from "@/utils/commonOptions";
 import { NButton, NInput } from "naive-ui";
 import BaseTextarea from "@/components/UI/BaseTextarea.vue";
 import BaseRadioInput from "@/components/UI/BaseRadioInput.vue";
-import TheHeader from "@/components/layout/TheHeader.vue";
 import {
   useFormDataStorage,
   useUserDataStorage,
@@ -250,15 +249,7 @@ function onChangeUserClick() {
 .fade-leave-to {
   opacity: 0;
 }
-.card-one-left-border-color {
-  border-left: 5px solid rgb(184, 126, 184);
-}
-.card-two-left-border-color {
-  border-left: 5px solid rgb(126, 148, 184);
-}
-.card-three-left-border-color {
-  border-left: 5px solid rgb(184, 182, 126);
-}
+
 .add-widht {
   width: 100%;
 }

@@ -1,5 +1,5 @@
 <template>
-  <TheHeader title="Översikt och skicka" class="header-style" />
+  <TheHeader :title="headerTitle" class="header-style" />
   <div class="outer">
     <div class="inner">
       <n-form ref="formRef" class="form-layout">
@@ -9,13 +9,19 @@
         <div class="buttons-container">
           <n-button
             type="primary"
-            size="small"
+            size="large"
             @click="goBack"
             :disabled="isBugDetailsPage"
+            class="left-button"
           >
             Tillbaka
           </n-button>
-          <n-button type="primary" size="small" @click="goNext">
+          <n-button
+            type="primary"
+            size="large"
+            class="right-button"
+            @click="goNext"
+          >
             {{ isBugDetailsPage ? "Nästa" : "Skicka" }}
           </n-button>
         </div>
@@ -39,10 +45,10 @@ const router = useRouter();
 const isBugDetailsPage = computed(
   () => route.name === RouteNames.BugDetailsView
 );
-const isOverViewAndSubmt = computed(
-  () => route.name === RouteNames.OverViewAndSubmit
-);
 
+const headerTitle = computed(() => {
+  return isBugDetailsPage.value ? "Bugg Detaljer" : "Översikt och Skicka";
+});
 function goBack() {
   router.push({ name: RouteNames.BugDetailsView });
 }
@@ -54,6 +60,7 @@ function goNext() {
 <style lang="scss" scoped>
 .form-layout {
   background-color: rgb(235, 235, 245);
+  width: 100%;
 }
 .outer {
   min-height: calc(100vh - 50px);
@@ -96,10 +103,6 @@ function goNext() {
 
 .n-modal-style {
   width: 600px;
-}
-.confetti-icon {
-  width: 100px;
-  height: 100px;
 }
 .confirmed-modal-btn-container {
   display: flex;
