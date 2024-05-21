@@ -1,7 +1,6 @@
 <template>
   <div class="form-layout">
-    <div>Anton</div>
-    <BaseCard>
+  <BaseCard>
       <h3>Välj system</h3>
       <NMessageProvider>
         <div class="add-system-button-container">
