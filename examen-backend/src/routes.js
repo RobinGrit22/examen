@@ -38,7 +38,7 @@ router.post("/project/:project_id/issue", async (req, res) => {
       },
       {
         headers: {
-          Authorization: process.env.LINEAR_API_KEY, // Ensure no "Bearer" prefix
+          Authorization: process.env.LINEAR_API_KEY,
           "Content-Type": "application/json",
         },
       }
